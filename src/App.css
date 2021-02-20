@@ -28,6 +28,23 @@
   color: #61dafb;
 }
 
+.caption {
+  font-size: 10px;
+  font-weight: bold;
+  text-align: left;
+  color: rgb(15, 15, 15);
+  position:absolute;
+  bottom:0;
+  left:0;
+  margin-left: 10%;
+}
+
+.captionButton {
+  position:absolute;
+  bottom:0;
+  right:0;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

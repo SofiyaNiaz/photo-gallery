@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, Card, CardText, CardImg, CardImgOverlay, Button } from 'reactstrap';
-import cabin from '../images/cabin.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExpand, faInfoCircle, faCompress } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Component for a single photo
@@ -15,6 +16,8 @@ class Photo extends React.Component {
 			photoCaption: props.caption ? props.caption: '',
 			isOpen: false 
 		};
+		this.enlargeImage = this.enlargeImage.bind(this);
+		this.collapseAll = this.collapseAll.bind(this);
 	}
 
 	componentDidMount() {
@@ -25,10 +28,25 @@ class Photo extends React.Component {
 		});
 	}
 
+	componentDidUpdate(prevState, prevProps) {
+
+	}
+
+	collapseAll() {
+		this.setState({
+			isOpen: false
+		});
+	}
+
+	enlargeImage() {
+		console.log("Enlarge Img");
+		this.setState({
+			isOpen: true
+		});
+	}
+
 	render() {
 		var singleImage = null;
-		console.log("Photo Src: " + cabin);
-		console.log("Photo Caption: " + this.state.photoCaption);
 		if(this.state.isOpen) {
 			//Enlarged Image
 			singleImage = (
@@ -37,9 +55,10 @@ class Photo extends React.Component {
 						<Card>
 							<CardImg width="100%" src={this.state.photoSrc} alt={this.props.altText} />
 							<CardImgOverlay>
-								<CardText>
-									<small className="text-muted">{this.state.photoCaption}</small>
+								<CardText className="caption">
+									<FontAwesomeIcon icon={faInfoCircle} /> {this.state.photoCaption}
 								</CardText>
+								<Button className="captionButton" color="primary" onClick={this.collapseAll}><FontAwesomeIcon icon={faCompress} /></Button>
 							</CardImgOverlay>
 						</Card>
 					</ModalBody>
@@ -51,10 +70,10 @@ class Photo extends React.Component {
 				<Card inverse>
 					<CardImg width="100%" src={this.state.photoSrc} alt={this.props.altText} />
 					<CardImgOverlay>
-						<CardText>
-							<small>{this.state.photoCaption}</small>
+						<CardText className="caption">
+							<FontAwesomeIcon icon={faInfoCircle} /> {this.state.photoCaption}
 						</CardText>
-						<Button color="primary">Open</Button>
+						<Button className="captionButton" color="primary" onClick={this.enlargeImage}><FontAwesomeIcon icon={faExpand} /></Button>
 					</CardImgOverlay>
 				</Card>
 			);
