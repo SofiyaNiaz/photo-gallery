@@ -1,7 +1,9 @@
 import React from 'react';
 import imagesAndCaption from '../utils/ImagesAndCaptions.js';
+import Photo from './Photo.js';
+import {CardColumns } from 'reactstrap';
 
-const houses = imagesAndCaption.Houses;
+const houses = imagesAndCaption;
 class PhotoGallery extends React.Component {
     constructor(props) {
         super(props);
@@ -13,8 +15,25 @@ class PhotoGallery extends React.Component {
     render() {
 
         var arrayOfPictures = [];
+        if(houses.length > 0) {
+            houses.forEach(function (eachHouse, i) {
+                arrayOfPictures.push((<Photo key={i} open={false} isPreviousExist={false} isNextExist={false} 
+                    caption={eachHouse.caption} altText={eachHouse.caption} srcUrl={eachHouse.src} />));
+            });
+        }
 
-        return ();
+        var organizeImages = (
+            <CardColumns>
+                {arrayOfPictures}  
+            </CardColumns>
+
+        );
+
+        return (
+            <div id='arrayOfImages'>
+                {organizeImages}
+            </div>
+        );
     }
 }
 

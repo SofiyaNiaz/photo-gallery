@@ -1,22 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
+import PhotoGallery from './components/PhotoGallery.js';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Welcome to your gallery of images. You can click to enlarge image and select next or previous. Click anywhere to minimize image.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div><PhotoGallery /></div>
       </header>
     </div>
   );
