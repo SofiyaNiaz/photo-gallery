@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalBody } from 'reactstrap';
+import { Modal, ModalBody, Card, CardTitle, CardText, CardImg, CardImgOverlay } from 'reactstrap';
 
 /**
  * Component for a single photo
@@ -27,12 +27,37 @@ class Photo extends React.Component {
 	render() {
 		var singleImage = null;
 		if(this.state.isOpen) {
-			singleImage = (<Modal isOpen={this.state.isOpen}>
-				<ModalBody><img src={this.state.photoSrc} alt={this.props.altText}><span>{this.state.photoCaption}</span></img></ModalBody></Modal>);
+			//Enlarged Image
+			singleImage = (
+				<Modal isOpen={this.state.isOpen}>
+					<ModalBody>
+						<Card inverse>
+							<CardImg width="100%" src={this.state.photoSrc} alt={this.props.altText} />
+							<CardImgOverlay>
+								<CardText>
+									<small className="text-muted">{this.state.photoCaption}</small>
+								</CardText>
+							</CardImgOverlay>
+						</Card>
+					</ModalBody>
+				</Modal>
+			);
 		} else {
-			singleImage = (<img src={this.state.photoSrc} alt={this.props.altText}></img>);
+			//Collapsed Image
+			singleImage = (
+				<div>
+					<Card inverse>
+						<CardImg width="100%" src={this.state.photoSrc} alt={this.props.altText} />
+						<CardImgOverlay>
+							<CardText>
+								<small className="text-muted">{this.state.photoCaption}</small>
+							</CardText>
+						</CardImgOverlay>
+					</Card>
+			  </div>
+			);
 		}
-		
+
 		return (
 			<div>{singleImage}</div>
 		);
