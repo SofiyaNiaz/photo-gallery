@@ -1,7 +1,7 @@
 import React from 'react';
 import imagesAndCaption from '../utils/ImagesAndCaptions.js';
 import Photo from './Photo.js';
-import {CardColumns } from 'reactstrap';
+import { CardGroup } from 'reactstrap';
 
 const houses = imagesAndCaption;
 class PhotoGallery extends React.Component {
@@ -21,9 +21,9 @@ class PhotoGallery extends React.Component {
         }
 
         var organizeImages = (
-            <CardColumns>
+            <CardGroup>
                 {arrayOfPictures}  
-            </CardColumns>
+            </CardGroup>
 
         );
 

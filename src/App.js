@@ -6,7 +6,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p>
-          Welcome to your gallery of images. You can click to enlarge image and select next or previous. Click anywhere to minimize image.
+          Welcome to your gallery of images
         </p>
         <div><PhotoGallery /></div>
       </header>

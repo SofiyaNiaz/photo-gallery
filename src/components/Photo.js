@@ -49,19 +49,21 @@ class Photo extends React.Component {
 			var imgSrc = null;
 			var imgCap = null;
 			if(houses.length > 0) {
-				houses.forEach(function (eachHouse, i) {
-					if(index === 0) {
+				for(let i = index; i < houses.length; i++) {
+					var eachHouse = houses[i];
+					if(source) {
 						if(source === eachHouse.src) {
 							index = i;
 							imgSrc = eachHouse.src;
-							imgCap = eachHouse.caption;
+							imgCap = eachHouse.caption;		
+							break;				
 						}
 					} else {
 						imgSrc = houses[index].src;
 						imgCap = houses[index].caption;
+						break;
 					}
-	
-				});
+				}
 			}
 			this.modalDisplay(imgSrc, imgCap, isOpen);
 		} else {
@@ -94,13 +96,13 @@ class Photo extends React.Component {
 							<CardImg width="100%" src={source} alt={caption} />
 							<CardImgOverlay>
 								<div>
-									<Button disabled={index === 0} color="secondary" onClick={this.goPrevious}><FontAwesomeIcon icon={faChevronLeft} /></Button>
-									<Button disabled={index === (houses.length - 1)} color="secondary" onClick={this.goNext}><FontAwesomeIcon icon={faChevronRight} /></Button>
+									<Button id="prevButton" className="goPrev" disabled={index === 0} color="secondary" onClick={this.goPrevious}><FontAwesomeIcon icon={faChevronLeft} /></Button>
+									<Button id="nextButton" className="goNext" disabled={index === (houses.length - 1)} color="secondary" onClick={this.goNext}><FontAwesomeIcon icon={faChevronRight} /></Button>
 								</div>							
 								<CardText className="caption">
 									<FontAwesomeIcon icon={faInfoCircle} /> {caption}
 								</CardText>
-								<Button className="captionButton" color="primary" onClick={this.collapseAll}><FontAwesomeIcon icon={faCompress} /></Button>
+								<Button id="minimize" className="captionButton" color="primary" onClick={this.collapseAll}><FontAwesomeIcon icon={faCompress} /></Button>
 							</CardImgOverlay>
 						</Card>
 					</ModalBody>
@@ -111,27 +113,29 @@ class Photo extends React.Component {
 	}
 
 	render() {
-		var singleImage = null;
+		var modalImage = null;
 		if(this.state.modalDisplay) {
 			//Enlarged Image
-			singleImage = this.state.modalDisplay;
-		} else {
-			//Collapsed Image
-			singleImage = (
-				<Card inverse>
-					<CardImg width="100%" src={this.state.photoSrc} alt={this.state.photoCaption} />
-					<CardImgOverlay>
-						<CardText className="caption">
-							<FontAwesomeIcon icon={faInfoCircle} /> {this.state.photoCaption}
-						</CardText>
-						<Button className="captionButton" color="primary" onClick={() => this.enlargeImage(this.state.photoSrc, true)}><FontAwesomeIcon icon={faExpand} /></Button>
-					</CardImgOverlay>
-				</Card>
-			);
+			modalImage = this.state.modalDisplay;
 		}
 
+		var singleImage = (
+			<Card inverse>
+				<CardImg width="100%" src={this.state.photoSrc} alt={this.state.photoCaption} />
+				<CardImgOverlay>
+					<CardText className="caption">
+						<FontAwesomeIcon icon={faInfoCircle} /> {this.state.photoCaption}
+					</CardText>
+					<Button id="maximize" className="captionButton" color="primary" onClick={() => this.enlargeImage(this.state.photoSrc, true)}><FontAwesomeIcon icon={faExpand} /></Button>
+				</CardImgOverlay>
+			</Card>
+		);
+
 		return (
-			<div>{singleImage}</div>
+			<div>
+				{singleImage}
+				{modalImage}
+			</div>
 		);
 	}
 

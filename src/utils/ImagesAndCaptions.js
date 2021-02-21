@@ -21,7 +21,7 @@ var ImagesAndCaptions = [
     { src: islandHouse, caption: 'Vacation on the Island' },
     { src: kameHouse, caption: 'Kame House' },
     { src: lakeHouse, caption: 'Lake House - Getaway' },
-    { src: mansion, caption: '' },
+    { src: mansion, caption: 'Super huge house' },
     { src: mountainHouse, caption: 'Ski trip' },
     { src: northPole, caption: 'Santas House' },
     { src: partyHouse, caption: 'Party house' },
