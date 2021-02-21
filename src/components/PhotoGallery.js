@@ -13,12 +13,10 @@ class PhotoGallery extends React.Component {
     }
 
     render() {
-
         var arrayOfPictures = [];
         if(houses.length > 0) {
             houses.forEach(function (eachHouse, i) {
-                arrayOfPictures.push((<Photo key={i} open={false} isPreviousExist={false} isNextExist={false} 
-                    caption={eachHouse.caption} altText={eachHouse.caption} srcUrl={eachHouse.src} />));
+                arrayOfPictures.push((<Photo key={i} caption={eachHouse.caption} srcUrl={eachHouse.src} />));
             });
         }
 

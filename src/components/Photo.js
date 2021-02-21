@@ -2,29 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, Card, CardText, CardImg, CardImgOverlay, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExpand, faInfoCircle, faCompress } from "@fortawesome/free-solid-svg-icons";
+import imagesAndCaption from '../utils/ImagesAndCaptions.js';
+import { faExpand, faInfoCircle, faCompress, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 /**
- * Component for a single photo
+ * Component for a single photo and Modal Array
  */
-
+const houses = imagesAndCaption;
+var index = 0;
 class Photo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			photoSrc: props.srcUrl ? props.srcUrl: '',
 			photoCaption: props.caption ? props.caption: '',
-			isOpen: false 
+			modalDisplay: null,
+			isOpen: false
 		};
 		this.enlargeImage = this.enlargeImage.bind(this);
 		this.collapseAll = this.collapseAll.bind(this);
+		this.goPrevious = this.goPrevious.bind(this);
+        this.goNext = this.goNext.bind(this);
+		this.modalDisplay = this.modalDisplay.bind(this);
 	}
 
 	componentDidMount() {
 		this.setState({
 			photoSrc: this.props.srcUrl,
 			photoCaption: this.props.caption,
-			isOpen: this.props.open
+			modalDisplay: null,
+			isOpen: false
 		});
 	}
 
@@ -33,30 +40,65 @@ class Photo extends React.Component {
 	}
 
 	collapseAll() {
-		this.setState({
-			isOpen: false
-		});
+		index = 0;
+		this.enlargeImage(null, false);
 	}
 
-	enlargeImage() {
-		console.log("Enlarge Img");
-		this.setState({
-			isOpen: true
-		});
+	enlargeImage(source, isOpen) {
+		if(isOpen) {
+			var imgSrc = null;
+			var imgCap = null;
+			if(houses.length > 0) {
+				houses.forEach(function (eachHouse, i) {
+					if(index === 0) {
+						if(source === eachHouse.src) {
+							index = i;
+							imgSrc = eachHouse.src;
+							imgCap = eachHouse.caption;
+						}
+					} else {
+						imgSrc = houses[index].src;
+						imgCap = houses[index].caption;
+					}
+	
+				});
+			}
+			this.modalDisplay(imgSrc, imgCap, isOpen);
+		} else {
+			this.modalDisplay(null, null, false);
+		}
+
 	}
 
-	render() {
-		var singleImage = null;
-		if(this.state.isOpen) {
-			//Enlarged Image
-			singleImage = (
-				<Modal isOpen={this.state.isOpen}>
+	goPrevious() {
+		if(index > 0) {
+			index--;
+			this.enlargeImage(null, true);
+		}
+    }
+
+	goNext() {
+		if(index < (houses.length - 1)) {
+			index++;
+			this.enlargeImage(null, true);
+		}
+	}
+
+	modalDisplay(source, caption, isOpen) {
+		var display = null;
+		if(isOpen) {
+			display = (
+				<Modal isOpen={isOpen}>
 					<ModalBody>
 						<Card>
-							<CardImg width="100%" src={this.state.photoSrc} alt={this.props.altText} />
+							<CardImg width="100%" src={source} alt={caption} />
 							<CardImgOverlay>
+								<div>
+									<Button disabled={index === 0} color="secondary" onClick={this.goPrevious}><FontAwesomeIcon icon={faChevronLeft} /></Button>
+									<Button disabled={index === (houses.length - 1)} color="secondary" onClick={this.goNext}><FontAwesomeIcon icon={faChevronRight} /></Button>
+								</div>							
 								<CardText className="caption">
-									<FontAwesomeIcon icon={faInfoCircle} /> {this.state.photoCaption}
+									<FontAwesomeIcon icon={faInfoCircle} /> {caption}
 								</CardText>
 								<Button className="captionButton" color="primary" onClick={this.collapseAll}><FontAwesomeIcon icon={faCompress} /></Button>
 							</CardImgOverlay>
@@ -64,16 +106,25 @@ class Photo extends React.Component {
 					</ModalBody>
 				</Modal>
 			);
+		}
+		this.setState({ modalDisplay: display });
+	}
+
+	render() {
+		var singleImage = null;
+		if(this.state.modalDisplay) {
+			//Enlarged Image
+			singleImage = this.state.modalDisplay;
 		} else {
 			//Collapsed Image
 			singleImage = (
 				<Card inverse>
-					<CardImg width="100%" src={this.state.photoSrc} alt={this.props.altText} />
+					<CardImg width="100%" src={this.state.photoSrc} alt={this.state.photoCaption} />
 					<CardImgOverlay>
 						<CardText className="caption">
 							<FontAwesomeIcon icon={faInfoCircle} /> {this.state.photoCaption}
 						</CardText>
-						<Button className="captionButton" color="primary" onClick={this.enlargeImage}><FontAwesomeIcon icon={faExpand} /></Button>
+						<Button className="captionButton" color="primary" onClick={() => this.enlargeImage(this.state.photoSrc, true)}><FontAwesomeIcon icon={faExpand} /></Button>
 					</CardImgOverlay>
 				</Card>
 			);
@@ -87,11 +138,7 @@ class Photo extends React.Component {
 }
 
 Photo.propTypes = {
-	isPreviousExist: PropTypes.bool.isRequired,
-	isNextExist: PropTypes.bool.isRequired,
-	open: PropTypes.bool.isRequired,
 	caption: PropTypes.string,
-	altText: PropTypes.string,
 	srcUrl: PropTypes.string.isRequired
 };
 
